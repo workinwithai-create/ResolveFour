@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ResolveFour — Four-bar resolution desk</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="eyebrow">Workin' With AI · Live chairs</div>
+      <h1>ResolveFour</h1>
+      <p>Four-bar resolution desk. After the pedal or the tension, the ear needs a clean landing. Session players resolve: piano arpeggios home, upright walks the root, kit settles, violin releases. Then the next section arrives.</p>
+      <p id="status">Seating chairs…</p>
+      <p class="note">Tap any control to start audio. On iOS the silent switch mutes Web Audio.</p>
+    </header>
+
+    <section class="controls">
+      <label>BPM <input id="bpm" type="number" min="60" max="180" value="92"></label>
+      <label>Key <input id="key" type="text" value="A minor"></label>
+      <label>Bars <input id="barsCount" type="number" min="4" max="16" value="8"></label>
+    </section>
+
+    <section>
+      <h2>Groove</h2>
+      <div id="grooves" class="buttons"></div>
+    </section>
+
+    <section>
+      <h2>Recipe</h2>
+      <div id="recipes" class="buttons"></div>
+    </section>
+
+    <section class="play">
+      <button id="playA">Play A · Tension</button>
+      <button id="playB">Play B · Resolve</button>
+      <button id="play8">Play 8 · Resolve only</button>
+      <button id="stop">Stop</button>
+    </section>
+
+    <section>
+      <h2>Punch list</h2>
+      <pre id="punch"></pre>
+    </section>
+
+    <section class="export">
+      <button id="exportWav">Export WAV</button>
+      <button id="exportMid">Export MIDI</button>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

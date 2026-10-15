@@ -1,0 +1,7 @@
+{
+  "name": "resolvefour",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve ."
+  }
+}
