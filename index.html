@@ -44,9 +44,17 @@
       <pre id="punch"></pre>
     </section>
 
+    <section class="license">
+      <h2>License</h2>
+      <p>One-time $27 lifetime via Lemon Squeezy. Enter key to unlock exports.</p>
+      <input id="licenseKey" type="text" placeholder="License key" style="width:100%;margin:8px 0">
+      <button id="activateLicense">Activate</button>
+      <p id="licenseStatus">Demo mode — exports locked until valid key.</p>
+    </section>
+
     <section class="export">
-      <button id="exportWav">Export WAV</button>
-      <button id="exportMid">Export MIDI</button>
+      <button id="exportWav" disabled>Export WAV</button>
+      <button id="exportMid" disabled>Export MIDI</button>
     </section>
   </main>
   <script src="app.js"></script>

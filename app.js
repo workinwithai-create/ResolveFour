@@ -36,7 +36,8 @@ const state = {
   key: "A minor",
   bars: 8,
   mode: "A",
-  mutes: {}
+  mutes: {},
+  licensed: false
 };
 
 let ctx, master, compressor, buffers = {}, rawBuffers = {}, activeSources = [], timerId, nextStepTime, step, playheadRAF;
@@ -81,12 +82,14 @@ async function load() {
   document.getElementById("status").textContent = "Chairs seated · live FluidR3 · tap any control to start audio";
   restore();
   render();
+  checkLicense();
 }
 
 function persist() {
   localStorage.setItem("resolvefour", JSON.stringify({
     bpm: state.bpm, key: state.key, bars: state.bars,
-    groove: state.groove.id, recipe: state.recipe.id
+    groove: state.groove.id, recipe: state.recipe.id,
+    licenseKey: localStorage.getItem("resolvefour-license") || ""
   }));
 }
 
@@ -108,6 +111,47 @@ function restore() {
   document.getElementById("bpm").value = state.bpm;
   document.getElementById("key").value = state.key;
   document.getElementById("barsCount").value = state.bars;
+  const storedKey = localStorage.getItem("resolvefour-license");
+  if (storedKey) document.getElementById("licenseKey").value = storedKey;
+}
+
+async function checkLicense() {
+  const key = localStorage.getItem("resolvefour-license");
+  if (!key) {
+    updateLicenseUI(false, "Enter key to unlock exports.");
+    return;
+  }
+  try {
+    const res = await fetch("https://api.lemonsqueezy.com/v1/licenses/validate", {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded" },
+      body: `license_key=${encodeURIComponent(key)}`
+    });
+    const data = await res.json();
+    if (data.valid) {
+      state.licensed = true;
+      updateLicenseUI(true, "Licensed. Exports unlocked.");
+    } else {
+      updateLicenseUI(false, data.error || "Invalid key.");
+    }
+  } catch (e) {
+    updateLicenseUI(false, "Validation failed. Check connection.");
+  }
+}
+
+function updateLicenseUI(ok, msg) {
+  document.getElementById("licenseStatus").textContent = msg;
+  document.getElementById("exportWav").disabled = !ok;
+  document.getElementById("exportMid").disabled = !ok;
+  state.licensed = ok;
+}
+
+async function activateLicense() {
+  const key = document.getElementById("licenseKey").value.trim();
+  if (!key) return;
+  localStorage.setItem("resolvefour-license", key);
+  await checkLicense();
+  persist();
 }
 
 function ensureCtx() {
@@ -311,6 +355,7 @@ function encodeWav(left, right, sampleRate) {
 }
 
 async function exportWav() {
+  if (!state.licensed) { alert("License required for export."); return; }
   const bars = +document.getElementById("barsCount").value || 8;
   const bpm = +document.getElementById("bpm").value || 92;
   state.bars = bars;
@@ -373,6 +418,7 @@ async function exportWav() {
 }
 
 function exportMid() {
+  if (!state.licensed) { alert("License required for export."); return; }
   // Minimal SMF Type 0 for the resolve parts (piano + bass)
   const bpm = +document.getElementById("bpm").value || 92;
   const bars = +document.getElementById("barsCount").value || 8;
@@ -431,6 +477,7 @@ document.getElementById("play8").onclick = () => start("8");
 document.getElementById("stop").onclick = stop;
 document.getElementById("exportWav").onclick = exportWav;
 document.getElementById("exportMid").onclick = exportMid;
+document.getElementById("activateLicense").onclick = activateLicense;
 document.getElementById("bpm").onchange = (e) => { state.bpm = +e.target.value; persist(); };
 document.getElementById("key").onchange = (e) => { state.key = e.target.value; persist(); };
 document.getElementById("barsCount").onchange = (e) => { state.bars = +e.target.value; persist(); };

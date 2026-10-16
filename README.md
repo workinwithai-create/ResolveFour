@@ -25,13 +25,13 @@ No oscillators. Audio never leaves the tab.
 
 Yesterday’s ship was HookLine / TensionFour. ResolveFour is the missing clean landing.
 
-## Pricing recommendation
+## Pricing
 
 One-time **$27** on Lemon Squeezy (Merchant of Record). Mirror on Gumroad.
 
 This is a finite desk, not a cloud meter. Do not subscribe. Forge Pass stays the recurring cloud bundle for MixForge / AuraMix / etc.
 
-**Current app is free.** No license gate. MIT. A priced build would need a Lemon Squeezy or Gumroad key check (or WorkinWithAI entitlement).
+License gate implemented: exports require a valid Lemon Squeezy key (validated via /v1/licenses/validate). Playback and punch list remain free. Create the product on Lemon Squeezy, generate keys, and the gate will unlock for buyers.
 
 Best place to sell: Lemon Squeezy + Gumroad mirror. Not the App Store. Not Plugin Boutique for a browser desk.
 
@@ -60,3 +60,5 @@ MIT. workinwithai-create.
 5. Block sample host + reload → UI names missing instruments.
 6. Longest held note sustains to end.
 7. Grep: no @main / @gh-pages, no Math.random in export path, voice names match samples.
+
+Milestone 2026-10-16: License key gate added for production readiness.
